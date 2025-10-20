@@ -1,0 +1,15 @@
+INSERT INTO tbl_marca (nombre, pais_origen, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Toyota', 'Japón', '1', NOW(), 1);
+INSERT INTO tbl_marca (nombre, pais_origen, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Hyundai', 'Corea del Sur', '1', NOW(), 1);
+INSERT INTO tbl_marca (nombre, pais_origen, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Ford', 'Estados Unidos', '1', NOW(), 1);
+INSERT INTO tbl_marca (nombre, pais_origen, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Honda', 'Japón', '1', NOW(), 1);
+INSERT INTO tbl_marca (nombre, pais_origen, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Chevrolet', 'Estados Unidos', '1', NOW(), 1);
+INSERT INTO tbl_modelo (nombre, descripcion, id_marca, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Corolla', 'Sedán compacto de alta durabilidad', 1, '1', NOW(), 1);
+INSERT INTO tbl_modelo (nombre, descripcion, id_marca, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Hilux', 'Pick-up 4x4 resistente', 1, '1', NOW(), 1);
+INSERT INTO tbl_modelo (nombre, descripcion, id_marca, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Tucson', 'SUV moderna y eficiente', 2, '1', NOW(), 1);
+INSERT INTO tbl_modelo (nombre, descripcion, id_marca, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Elantra', 'Sedán mediano con estilo deportivo', 2, '1', NOW(), 1);
+INSERT INTO tbl_modelo (nombre, descripcion, id_marca, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Ranger', 'Camioneta todo terreno', 3, '1', NOW(), 1);
+INSERT INTO tbl_modelo (nombre, descripcion, id_marca, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Focus', 'Compacto eficiente y moderno', 3, '1', NOW(), 1);
+INSERT INTO tbl_modelo (nombre, descripcion, id_marca, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Civic', 'Sedán deportivo y confiable', 4, '1', NOW(), 1);
+INSERT INTO tbl_modelo (nombre, descripcion, id_marca, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('CR-V', 'SUV familiar con gran confort', 4, '1', NOW(), 1);
+INSERT INTO tbl_modelo (nombre, descripcion, id_marca, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Onix', 'Compacto urbano de bajo consumo', 5, '1', NOW(), 1);
+INSERT INTO tbl_modelo (nombre, descripcion, id_marca, estado, aud_registro_fecha, aud_registro_id_usuario) VALUES ('Tracker', 'SUV versátil y económico', 5, '1', NOW(), 1);

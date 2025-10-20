@@ -1,0 +1,15 @@
+package pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+@SpringBootApplication
+@EnableJpaAuditing(auditorAwareRef = "auditorProvider")
+public class MsNegocioGestionVehiculosApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(MsNegocioGestionVehiculosApplication.class, args);
+	}
+
+}
