@@ -1,0 +1,12 @@
+MS - NEGOCIO
+-------------------------------------------------
+ms-negocio-gestion-vehiculos      	8081 
+
+
+MS – ADMINISTRACION(INFRAESTRUCTURA)
+----------------------------------------------------
+
+ms-administracion-server-config      8888 
+ms-administracion-server-registry    8889 
+ms-administracion-server-admin       8890 
+ms-administracion-api-gateway        8891 
