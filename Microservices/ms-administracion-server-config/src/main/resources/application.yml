@@ -5,26 +5,26 @@ spring:
     name: ms-administracion-server-config
 
 # Configuracion Local
-  profiles:
-    active: native
-  cloud:
-    config:
-      server:
-        native:
-          searchLocations: file:///C:/GalaxyTraining/Cursos/CURS-000437-Microservices/Proyecto/Microservices/ms-administracion-data-config
-
-
-# Configuracion Cloud (git)
+#  profiles:
+#    active: native
 #  cloud:
 #    config:
 #      server:
-#        git:
-#          uri: https://github.com/Alexandra9804/PROYECTO-CURS-000437.git
-#          searchPaths: 02.-Microservices/F02/ms-administracion-data-config
-#          username: ${USER_NAME}
-#          password: ${USER_TOKEN}
-#          default-label: master
-#          cloneOnStart: true
+#        native:
+#          searchLocations: file:///C:/GalaxyTraining/Cursos/CURS-000437-Microservices/Proyecto/Microservices/ms-administracion-data-config
+
+
+# Configuracion Cloud (git)
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Alexandra9804/PROYECTO-CURS-000437.git
+          searchPaths: Microservices/ms-administracion-data-config
+          username: ${USER_NAME}
+          password: ${USER_TOKEN}
+          default-label: master
+          cloneOnStart: true
 
 management:
   endpoints:
