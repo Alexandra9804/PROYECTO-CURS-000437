@@ -1,4 +1,4 @@
-package pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.config;
+package pe.edu.galaxy.training.java.ms.negocio.gestion.clientes.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 )
         ),
         servers = {
-                @Server(url = "http://localhost:8081", description = "Servidor local de desarrollo"),
+                @Server(url = "http://localhost:8082", description = "Servidor local de desarrollo"),
         }
 )
 public class OpenApiConfig {
