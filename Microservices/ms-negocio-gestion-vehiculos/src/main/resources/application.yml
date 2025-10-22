@@ -1,6 +1,5 @@
 spring:
   application:
       name: ms-negocio-gestion-vehiculos
-
   config:
     import: optional:configserver:http://localhost:8888
