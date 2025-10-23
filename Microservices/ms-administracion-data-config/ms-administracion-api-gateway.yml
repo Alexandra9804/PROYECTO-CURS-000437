@@ -30,6 +30,18 @@ spring:
                 - Path=/ms-vehiculos/**
               filters:
                 - RewritePath=/ms-vehiculos/(?<path>.*), /$\{path}
+            - id: id-ms-clientes
+              uri: lb://MS-NEGOCIO-GESTION-CLIENTES
+              predicates:
+                - Path=/ms-clientes/**
+              filters:
+                - RewritePath=/ms-clientes/(?<path>.*), /$\{path}
+            - id: id-ms-alquileres
+              uri: lb://MS-NEGOCIO-GESTION-ALQUILERES
+              predicates:
+                - Path=/ms-alquileres/**
+              filters:
+                - RewritePath=/ms-alquileres/(?<path>.*), /$\{path}
 
 # Server Registry Client
 eureka:

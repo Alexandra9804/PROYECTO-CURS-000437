@@ -1,10 +1,10 @@
-package pe.edu.galaxy.training.ms_negocio_gestion_alquiler;
+package pe.edu.galaxy.training.ms.negocio.gestion.alquiler;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MsNegocioGestionAlquilerApplicationTests {
+class MsNegocioGestionMsNegocioGestionAlquilerApplicationTests {
 
 	@Test
 	void contextLoads() {

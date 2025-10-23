@@ -17,6 +17,4 @@ public interface VehiculoMapper {
     @Mapping(source = "modeloEntity.marcaEntity.idMarca", target = "idMarca")
     @Mapping(source = "modeloEntity.marcaEntity.nombre", target = "marcaNombre")
     VehiculoResponseDto toDTO(VehiculoEntity entity);
-
-
 }

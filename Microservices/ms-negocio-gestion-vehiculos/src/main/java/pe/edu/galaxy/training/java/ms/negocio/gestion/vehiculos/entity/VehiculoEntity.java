@@ -20,7 +20,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class VehiculoEntity extends BaseEntity {
 
-    @Comment(value = "Identificador único(código) del vehiculo")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_vehiculo", nullable = false, updatable = false)

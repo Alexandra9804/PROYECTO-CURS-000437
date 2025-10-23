@@ -1,4 +1,4 @@
-package pe.edu.galaxy.training.java.ms.negocio.gestion.clientes.dto;
+package pe.edu.galaxy.training.ms.negocio.gestion.alquiler.service.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -6,26 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(
-        name = "ClienteResponseDTO",
-        description = "Representa la información completa del cliente y sus datos personales."
-)
+@Getter
+@Setter
+@Schema(description = "DTO de respuesta para el cliente")
 public class ClienteResponseDto {
     @Schema(
             description = "Identificador único del cliente",
             example = "1001"
     )
     private Long idCliente;
-
-    @Schema(
-            description = "Descripción del tipo de cliente (por ejemplo: Regular, Corporativo, Premium)",
-            example = "Regular"
-    )
-    private String tipoClienteDescripcion;
 
     @Schema(
             description = "Nombre de la persona",
