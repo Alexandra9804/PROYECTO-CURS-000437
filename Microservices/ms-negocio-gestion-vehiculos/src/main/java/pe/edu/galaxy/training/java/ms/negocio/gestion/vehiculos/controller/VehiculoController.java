@@ -76,7 +76,7 @@ public class VehiculoController {
     public ResponseEntity<VehiculoResponseDto> obtenerPorId(
             @Parameter(description = "Identificador único del vehículo", required = true, example = "1")
             @PathVariable Long id) {
-        return ResponseEntity.ok(vehiculoService.findById(id).get());
+        return ResponseEntity.ok(vehiculoService.findById(id));
 
     }
 

@@ -1,6 +1,7 @@
 package pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.services.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.constant.ExceptionMessages;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.VehiculoRequestDto;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.VehiculoResponseDto;
@@ -30,6 +31,7 @@ public class VehiculoServiceImpl implements VehiculoService {
         this.modeloRepository = ModeloRepository;
     }
 
+    @Transactional
     @Override
     public VehiculoResponseDto save(VehiculoRequestDto vehiculoRequestDto) {
         VehiculoEntity vehiculoEntity = vehiculoMapper.toEntity(vehiculoRequestDto);
@@ -42,6 +44,7 @@ public class VehiculoServiceImpl implements VehiculoService {
 
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<VehiculoResponseDto> findAll() {
         List<VehiculoEntity> vehiculos = vehiculoRepository.findAll();
@@ -50,12 +53,14 @@ public class VehiculoServiceImpl implements VehiculoService {
                 .toList();
     }
 
+
+    @Transactional(readOnly = true)
     @Override
-    public Optional<VehiculoResponseDto> findById(Long id) {
+    public VehiculoResponseDto findById(Long id) {
 
         VehiculoEntity vehiculoEntity = vehiculoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ExceptionMessages.VEHICULO_NO_ENCONTRADO, id)));
 
-        return Optional.ofNullable(vehiculoMapper.toDTO(vehiculoEntity));
+        return vehiculoMapper.toDTO(vehiculoEntity);
     }
 
 

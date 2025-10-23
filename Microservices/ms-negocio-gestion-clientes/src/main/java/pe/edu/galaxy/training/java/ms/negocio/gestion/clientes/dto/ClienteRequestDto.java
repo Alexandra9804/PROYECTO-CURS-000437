@@ -14,7 +14,7 @@ public class ClienteRequestDto {
 
     @Schema(
             description = "Id del tipo de cliente (1 = Regular, 2 = Corporativo, 3 = Premium)",
-            example = "1"
+            example = "300"
     )
     private Long tipoClienteId;
 
@@ -22,12 +22,12 @@ public class ClienteRequestDto {
             description = "Objeto que contiene la información de la persona asociada al cliente",
             example = """
         {
-          "tipoPersona": 1,
+          "tipoPersona": 100,
           "nombres": "Juan Carlos",
           "apellidoPaterno": "Pérez",
           "apellidoMaterno": "Gómez",
           "razonSocial": null,
-          "tipoDocumento": 1,
+          "tipoDocumento": 200,
           "numeroDocumento": "12345678",
           "direccion": "Av. Los Olivos 123, Lima",
           "telefono": "999888777",

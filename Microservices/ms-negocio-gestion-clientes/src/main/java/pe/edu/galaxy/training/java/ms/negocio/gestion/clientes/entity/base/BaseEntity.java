@@ -24,22 +24,22 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
     @CreatedDate
-    @Column(name = "aud_registro_fecha",nullable = false)
+    @Column(name = "AUD_REGISTRO_FECHA",nullable = false)
     private LocalDateTime audRegistroFecha;
 
     @CreatedBy
-    @Column(name = "aud_registro_id_usuario",nullable = false)
+    @Column(name = "AUD_REGISTRO_ID_USUARIO",nullable = false)
     private Long audRegistroIdUsuario;
 
     @LastModifiedDate
-    @Column(name = "aud_actualizacion_fecha",nullable = true)
+    @Column(name = "AUD_ACTUALIZACION_FECHA",nullable = true)
     private LocalDateTime audActualizacionFecha;
 
     @LastModifiedBy
-    @Column(name = "aud_actualizacion_id_usuario",nullable = true)
+    @Column(name = "AUD_ACTUALIZACION_ID_USUARIO",nullable = true)
     private Long audActualizacionIdUsuario;
 
-    @Column(name = "estado",nullable = false, length = 1)
+    @Column(name = "ESTADO",nullable = false, length = 1)
     private String estado; //Borrado Logico 1: Activo, 0: Inactivo
 
     @PrePersist

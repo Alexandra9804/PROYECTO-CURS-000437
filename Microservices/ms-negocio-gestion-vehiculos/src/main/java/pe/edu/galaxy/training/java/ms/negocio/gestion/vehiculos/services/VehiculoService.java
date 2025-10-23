@@ -11,5 +11,5 @@ public interface VehiculoService {
 
     List<VehiculoResponseDto> findAll();
 
-    Optional<VehiculoResponseDto> findById(Long id);
+    VehiculoResponseDto findById(Long id);
 }
