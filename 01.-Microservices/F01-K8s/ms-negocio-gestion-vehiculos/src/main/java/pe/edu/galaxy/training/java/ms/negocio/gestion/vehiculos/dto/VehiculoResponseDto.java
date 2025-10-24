@@ -9,6 +9,8 @@ import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.enums.EstadoVehi
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.enums.TipoCombustible;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.enums.TipoTransmision;
 
+import java.math.BigDecimal;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -55,5 +57,5 @@ public class VehiculoResponseDto {
     private String marcaNombre;
 
     @Schema(description = "Tarifa diaria vigente del vehículo", example = "250.00")
-    private Integer tarifaActual;
+    private BigDecimal tarifaActual;
 }

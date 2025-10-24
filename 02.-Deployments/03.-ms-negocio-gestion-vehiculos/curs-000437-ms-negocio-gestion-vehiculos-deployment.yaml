@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curs-000437-ms-negocio-gestion-vehiculos-deployment
+  labels:                     
+    app: ms-negocio-gestion-vehiculos
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ms-negocio-gestion-vehiculos
+  template:
+    metadata:
+      labels:
+        app: ms-negocio-gestion-vehiculos
+    spec:
+      containers:
+      - name: curs-000437-ms-negocio-gestion-vehiculos
+        image: achavezgal/ms-negocio-gestion-vehiculos-cur-000437:1.0.0
+        imagePullPolicy: Always
+        ports:
+          - name: http
+            containerPort: 8081
+        resources:
+          limits:
+            cpu: '1'
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 1Gi
+        env:
+#        - name: SPRING_DATASOURCE_USERNAME
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: curs-000437-mysql-user-secret
+              key: rootUsername
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: curs-000437-mysql-user-secret
+              key: rootPassword
+        - name: MYSQL_SERVICE
+          value: curs-000437-db-mysql-service
+        - name: DB_NAME
+          value: db_ms_vehiculos
+        - name: DDL_AUTO
+          value: create
+#        - name: SPRING_DATASOURCE_URL
+#          valueFrom:
+#            secretKeyRef:
+#              name: curs-000367-mysql-dbs-urls-secret
+#              key: ms_vehiculos_db_url
+#        - name: MS_SERVER_CONFIG
+#          valueFrom: 
+#            secretKeyRef:
+#              name: mysql-ms-server-config-urls-secret
+#              key: ms_server-config_url

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curs-000437-ms-negocio-gestion-clientes-deployment
+  labels:
+    app: ms-negocio-gestion-clientes
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ms-negocio-gestion-clientes
+  template:
+    metadata:
+      labels:
+        app: ms-negocio-gestion-clientes
+    spec:
+      containers:
+        - name: curs-000437-ms-negocio-gestion-clientes
+          image: achavezgal/ms-negocio-gestion-clientes-cur-000437:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8082
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          env:
+            # Variables para Oracle
+            - name: ORACLE_SERVICE
+              value: curs-000437-db-oracle-service
+            - name: ORACLE_PORT
+              value: "1521"
+            - name: ORACLE_SID
+              value: "XEPDB1"
+            - name: ORACLE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: curs-000437-oracle-user-secret
+                  key: oracleUsername
+            - name: ORACLE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: curs-000437-oracle-user-secret
+                  key: oraclePassword
+            - name: DDL_AUTO
+              value: "update"
+            - name: SHOW_SQL
+              value: "true"

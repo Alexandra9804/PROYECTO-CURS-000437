@@ -102,9 +102,6 @@ CREATE TABLE CLIENTE (
                          AUD_ACTUALIZACION_FECHA     TIMESTAMP        NULL,
                          AUD_ACTUALIZACION_ID_USUARIO NUMBER(10)      NULL,
                          ESTADO                      CHAR(1)          DEFAULT '1',
-    --------------------------------------------------------
-    -- CLAVES FORÁNEAS
-    --------------------------------------------------------
                          CONSTRAINT FK_CLIENTE_PERSONA FOREIGN KEY (PERSONA_ID)
                              REFERENCES PERSONA (PERSONA_ID),
                          CONSTRAINT FK_CLIENTE_TIPO_CLIENTE FOREIGN KEY (ID_TIPO_CLIENTE)
@@ -126,5 +123,76 @@ INSERT INTO TIPO_DOCUMENTO (ID_TIPO_DOCUMENTO, DESCRIPCION, CODIGO) VALUES (202,
 INSERT INTO TIPO_CLIENTE (ID_TIPO_CLIENTE, DESCRIPCION, CODIGO) VALUES (300, 'Regular', 'REG');
 INSERT INTO TIPO_CLIENTE (ID_TIPO_CLIENTE, DESCRIPCION, CODIGO) VALUES (301, 'Corporativo', 'CORP');
 INSERT INTO TIPO_CLIENTE (ID_TIPO_CLIENTE, DESCRIPCION, CODIGO) VALUES (302, 'Premium', 'PREM');
+
+INSERT INTO PERSONA (
+    PERSONA_ID,
+    ID_TIPO_PERSONA,
+    NOMBRES,
+    APELLIDO_PATERNO,
+    APELLIDO_MATERNO,
+    ID_TIPO_DOCUMENTO,
+    NUMERO_DOCUMENTO,
+    DIRECCION,
+    TELEFONO,
+    CORREO
+) VALUES (
+             1,
+             100, -- Natural
+             'Luis Alberto',
+             'Hernandez',
+             'Soto',
+             200, -- DNI
+             '77586904',
+             'Av. Los Robles 123, Lima',
+             '999888777',
+             'lhernandez@example.com'
+         );
+
+INSERT INTO PERSONA (
+    PERSONA_ID,
+    ID_TIPO_PERSONA,
+    NOMBRES,
+    APELLIDO_PATERNO,
+    APELLIDO_MATERNO,
+    ID_TIPO_DOCUMENTO,
+    NUMERO_DOCUMENTO,
+    DIRECCION,
+    TELEFONO,
+    CORREO
+) VALUES (
+             2,
+             100, -- Natural
+             'Maria Fernanda',
+             'Rojas',
+             'Perez',
+             200, -- DNI
+             '44556677',
+             'Jr. Primavera 432, Arequipa',
+             '988777666',
+             'mrojas@example.com'
+         );
+
+------------------------------------------------------------
+-- DATOS DE CLIENTES
+------------------------------------------------------------
+INSERT INTO CLIENTE (
+    CLIENTE_ID,
+    PERSONA_ID,
+    ID_TIPO_CLIENTE
+) VALUES (
+             SEQ_CLIENTE.NEXTVAL,
+             1, -- Luis Alberto
+             300 -- Regular
+         );
+
+INSERT INTO CLIENTE (
+    CLIENTE_ID,
+    PERSONA_ID,
+    ID_TIPO_CLIENTE
+) VALUES (
+             SEQ_CLIENTE.NEXTVAL,
+             2, -- Maria Fernanda
+             302 -- Premium
+         );
 
 COMMIT;

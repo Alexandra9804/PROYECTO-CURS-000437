@@ -1,0 +1,20 @@
+kubectl apply -f  ms-negocio-gestion-productos-deployment.yaml
+
+kubectl apply -f  ms-negocio-gestion-productos-service.yaml
+
+kubectl delete deployment.apps/ms-negocio-gestion-productos-deployment service/ms-negocio-gestion-productos-service
+
+kubectl get secrets,deployment,services,pods
+
+# Restart
+kubectl rollout restart deployment ms-negocio-gestion-productos-deployment
+
+# Scale
+kubectl scale deployment ms-negocio-gestion-productos-deployment --replicas=1
+
+
+kubectl scale --replicas=2 deployment.apps/curs-000303-ms-negocio-gestion-productos-deployment
+
+minikube services curs-000303-ms-negocio-gestion-productos-service --url
+
+kubectl rollout restart deployment.apps/curs-000303-ms-negocio-gestion-productos-deployment
