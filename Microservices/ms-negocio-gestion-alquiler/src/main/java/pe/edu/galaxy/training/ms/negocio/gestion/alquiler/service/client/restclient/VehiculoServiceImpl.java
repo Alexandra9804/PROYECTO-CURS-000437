@@ -11,7 +11,7 @@ public class VehiculoServiceImpl implements VehiculoService{
 
     public VehiculoServiceImpl(){
         this.restClient = RestClient.builder()
-                //.baseUrl("MS-NEGOCIO-GESTION-VEHICULOS/api/v1/vehiculos")
+                //.baseUrl("ms-vehiculos/api/v1/vehiculos")
                 .baseUrl("http://localhost:8081/api/v1/vehiculos")
                 .build();
     }

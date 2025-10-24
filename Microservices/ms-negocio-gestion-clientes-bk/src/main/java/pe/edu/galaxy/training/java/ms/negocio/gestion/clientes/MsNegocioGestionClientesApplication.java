@@ -1,4 +1,4 @@
-package pe.edu.galaxy.training.ms.negocio.gestion.alquiler;
+package pe.edu.galaxy.training.java.ms.negocio.gestion.clientes;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-public class MsNegocioGestionAlquilerApplication {
+public class MsNegocioGestionClientesApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MsNegocioGestionAlquilerApplication.class, args);
+		SpringApplication.run(MsNegocioGestionClientesApplication.class, args);
 	}
 
 }

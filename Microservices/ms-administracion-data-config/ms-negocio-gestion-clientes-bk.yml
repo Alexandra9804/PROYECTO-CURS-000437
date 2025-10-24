@@ -1,0 +1,46 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: ms-negocio-gestion-clientes-bk
+
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@127.0.0.1:1522:xe
+    username: DB_MS_CLIENTES_CURS_000437_BK
+    password: 123456
+
+  jpa:
+    hibernate:
+      #ddl-auto: create
+    show-sql: true
+  boot:
+    admin:
+      client:
+        url: http://localhost:8890
+        instance:
+          management-base-url: http://localhost:${server.port:8084}
+eureka:
+  instance:
+      hostname: localhost
+      prefer-ip-address: false
+      instance-id: ${spring.application.name}:${server.port:8084}
+  client:
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8889/eureka
+      
+management:
+    endpoints:
+        web:
+            exposure:
+                include: "*"
+    health:
+        readinessstate:
+            enabled: true
+        livenessstate:
+            enabled: true
+    endpoint:
+        health:
+            probes:
+                enabled: true

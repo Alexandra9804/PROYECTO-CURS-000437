@@ -24,10 +24,10 @@ public class AlquilerCabeceraResponseDto {
 
     private ClienteResponseDto clienteResponseDto;
 
-    @Schema(description = "Fecha de inicio del alquiler", example = "2025-10-23")
+    @Schema(description = "Fecha de inicio del alquiler", example = "23/10/2025")
     private LocalDate fechaInicio;
 
-    @Schema(description = "Fecha de finalización del alquiler", example = "2025-10-26")
+    @Schema(description = "Fecha de finalización del alquiler", example = "26/10/2025")
     private LocalDate fechaFin;
 
     @Schema(description = "Subtotal general del alquiler (suma de subtotales de los detalles)", example = "700.00")
