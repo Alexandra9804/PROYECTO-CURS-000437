@@ -1,0 +1,41 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curs-000437-db-mysql-deployment
+  labels:
+    app: srv-db-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: db-mysql
+      app: srv-db-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: srv-db-mysql
+      labels:
+        name: db-mysql
+        app: srv-db-mysql
+    spec:
+      containers:
+      - image: mysql:9.3.0
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: curs-000437-mysql-user-secret
+              key: rootPassword
+        ports:
+        - containerPort: 3306
+          name: mysql
+        resources:
+          limits:
+            cpu: '1'
+            memory: 2Gi
+          requests:
+            cpu: '100m'
+            memory: 1Gi

@@ -1,0 +1,69 @@
+server:
+  port: 8887
+
+spring:
+
+# Server Admin Client
+  boot:
+    admin:
+      client:
+        url: http://localhost:8890
+        instance:
+          management-base-url: http://localhost:${server.port:8887}
+
+# Mapeo de Microservicios
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lowerCaseServiceId: true
+          route-refresh-listener:
+            enabled: true
+          # Personalizado - Routers
+          routes:
+            - id: id-ms-vehiculos
+              uri: lb://MS-NEGOCIO-GESTION-VEHICULOS
+              predicates:
+                - Path=/ms-vehiculos/**
+              filters:
+                - RewritePath=/ms-vehiculos/(?<path>.*), /$\{path}
+            - id: id-ms-clientes
+              uri: lb://MS-NEGOCIO-GESTION-CLIENTES
+              predicates:
+                - Path=/ms-clientes/**
+              filters:
+                - RewritePath=/ms-clientes/(?<path>.*), /$\{path}
+            - id: id-ms-alquileres
+              uri: lb://MS-NEGOCIO-GESTION-ALQUILERES
+              predicates:
+                - Path=/ms-alquileres/**
+              filters:
+                - RewritePath=/ms-alquileres/(?<path>.*), /$\{path}
+
+# Server Registry Client
+eureka:
+  instance:
+      hostname: localhost
+      prefer-ip-address: false
+      instance-id: ${spring.application.name}:${server.port}
+  client:
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8889/eureka
+
+# Activacion de endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      # Deshabilitar routes autogeneradas
+      #         enabled: false
+      access: unrestricted
+    health:
+      show-details: always
