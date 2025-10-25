@@ -10,6 +10,7 @@ import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.entity.VehiculoE
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.exceptions.ResourceNotFoundException;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.mapper.VehiculoMapper;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.repository.ModeloRepository;
+import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.repository.TarifaVehiculoRepository;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.repository.VehiculoRepository;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.services.VehiculoService;
 
@@ -25,10 +26,13 @@ public class VehiculoServiceImpl implements VehiculoService {
 
     private final ModeloRepository modeloRepository;
 
-    public VehiculoServiceImpl(VehiculoRepository vehiculoRepository, VehiculoMapper vehiculoMapper, ModeloRepository ModeloRepository) {
+    private final TarifaVehiculoRepository tarifaVehiculoRepository;
+
+    public VehiculoServiceImpl(VehiculoRepository vehiculoRepository, VehiculoMapper vehiculoMapper, ModeloRepository ModeloRepository, TarifaVehiculoRepository tarifaVehiculoRepository) {
         this.vehiculoRepository = vehiculoRepository;
         this.vehiculoMapper = vehiculoMapper;
         this.modeloRepository = ModeloRepository;
+        this.tarifaVehiculoRepository = tarifaVehiculoRepository;
     }
 
     @Transactional
@@ -47,9 +51,16 @@ public class VehiculoServiceImpl implements VehiculoService {
     @Transactional(readOnly = true)
     @Override
     public List<VehiculoResponseDto> findAll() {
-        List<VehiculoEntity> vehiculos = vehiculoRepository.findAll();
-        return vehiculos.stream()
-                .map(vehiculoMapper::toDTO)
+        return vehiculoRepository.findAll().stream()
+                .map(entity -> {
+                    VehiculoResponseDto dto = vehiculoMapper.toDTO(entity);
+
+                    tarifaVehiculoRepository
+                            .findFirstByVehiculo_IdVehiculoAndFechaFinIsNullAndEstado(entity.getIdVehiculo(), "1")
+                            .ifPresent(tarifa -> dto.setTarifaActual(tarifa.getMonto()));
+
+                    return dto;
+                })
                 .toList();
     }
 
@@ -57,11 +68,17 @@ public class VehiculoServiceImpl implements VehiculoService {
     @Transactional(readOnly = true)
     @Override
     public VehiculoResponseDto findById(Long id) {
+        VehiculoEntity entity = vehiculoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format(ExceptionMessages.VEHICULO_NO_ENCONTRADO, id)));
 
-        VehiculoEntity vehiculoEntity = vehiculoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ExceptionMessages.VEHICULO_NO_ENCONTRADO, id)));
+        VehiculoResponseDto dto = vehiculoMapper.toDTO(entity);
 
-        return vehiculoMapper.toDTO(vehiculoEntity);
+        tarifaVehiculoRepository
+                .findFirstByVehiculo_IdVehiculoAndFechaFinIsNullAndEstado(entity.getIdVehiculo(), "1")
+                .ifPresent(tarifa -> dto.setTarifaActual(tarifa.getMonto()));
+
+        return dto;
     }
-
 
 }
