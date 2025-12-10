@@ -27,6 +27,12 @@ public class MarcaEntity extends BaseEntity {
     @Column(name = "pais_origen", nullable = true, length = 50)
     private String paisOrigen;
 
+    @Column(name = "descripcion", nullable = true, length = 150)
+    private String descripcion;
+
+    @Column(name = "anio_fundacion", nullable = true)
+    private Integer anioFundacion;
+
     @OneToMany(mappedBy = "marcaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ModeloEntity> modelos;
 }
