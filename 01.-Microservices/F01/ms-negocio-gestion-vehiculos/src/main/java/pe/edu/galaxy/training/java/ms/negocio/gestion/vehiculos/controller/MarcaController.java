@@ -104,7 +104,7 @@ public class MarcaController {
             responseCode = "200",
             description = "Marca encontrada correctamente",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = MarcaController.SuccessMarcaResponse.class))
+                    schema = @Schema(implementation = MarcaController.SuccessPageMarcaResponse.class))
     )
     @GetMapping("/search")
     public ResponseEntity<Page<MarcaResponseDto>> buscarPorNombre(

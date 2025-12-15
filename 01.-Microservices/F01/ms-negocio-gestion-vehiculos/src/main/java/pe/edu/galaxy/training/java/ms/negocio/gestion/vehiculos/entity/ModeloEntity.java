@@ -31,6 +31,15 @@ public class ModeloEntity extends BaseEntity {
     @Column(name = "descripcion", length = 100)
     private String descripcion;
 
+    @Column(name = "anio_lanzamiento")
+    private Integer anioLanzamiento;
+
+    @Column(name = "version", length = 30)
+    private String version;
+
+    @Column(name = "capacidad_pasajeros")
+    private Integer capacidadPasajeros;
+
     @OneToMany(mappedBy = "modeloEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VehiculoEntity> vehiculos;
 }
