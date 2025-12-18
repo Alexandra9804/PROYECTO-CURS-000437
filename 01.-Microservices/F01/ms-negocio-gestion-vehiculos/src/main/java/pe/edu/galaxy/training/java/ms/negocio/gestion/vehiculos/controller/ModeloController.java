@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.advice.SuccessMessage;
+import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.MarcaRequestDto;
+import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.MarcaResponseDto;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.ModeloRequestDto;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.ModeloResponseDto;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.services.ModeloService;
@@ -72,6 +74,39 @@ public class ModeloController {
     ) {
         ModeloResponseDto response = modeloService.save(dto);
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ModeloResponseDto> updateMarca(
+            @PathVariable Long id,
+            @RequestBody ModeloRequestDto modeloRequestDto) {
+        return ResponseEntity.ok(modeloService.update(id, modeloRequestDto));
+    }
+
+    @Operation(
+            method = "GET",
+            summary = "Obtener un modelo por su ID",
+            description = "API encargada de obtener la información detallada de un modelo a partir de su id."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Modelo encontrado correctamente",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ModeloController.SuccessModeloResponse.class))
+    )
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ModeloResponseDto> obtenerPorId(
+            @Parameter(description = "Identificador único del modelo", required = true, example = "1")
+            @PathVariable Long id) {
+        return ResponseEntity.ok(modeloService.findById(id));
+
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> eliminar(
+            @Parameter(description = "Identificador único del modelo", required = true, example = "1")
+            @PathVariable Long id) {
+        return ResponseEntity.ok(modeloService.delete(id));
     }
 
     private static class SuccessModeloResponse extends SuccessMessage<ModeloResponseDto> {}

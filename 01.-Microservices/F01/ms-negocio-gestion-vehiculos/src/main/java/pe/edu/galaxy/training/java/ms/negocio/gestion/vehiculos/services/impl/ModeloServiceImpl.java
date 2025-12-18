@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.constant.ExceptionMessages;
+import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.MarcaResponseDto;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.ModeloRequestDto;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.ModeloResponseDto;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.entity.MarcaEntity;
@@ -44,5 +45,41 @@ public class ModeloServiceImpl implements ModeloService {
         modeloEntity.setMarcaEntity(marcaEntity);
 
         return modeloMapper.toDTO(modeloRepository.save(modeloEntity));
+    }
+
+    @Override
+    public ModeloResponseDto update(Long idModelo, ModeloRequestDto modeloRequestDto) {
+        ModeloEntity modeloEntity = modeloRepository.findById(idModelo)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format(ExceptionMessages.MODELO_NO_ENCONTRADO, idModelo)));
+
+        MarcaEntity marcaEntity = marcaRepository.findById(modeloRequestDto.getMarcaId())
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionMessages.MARCA_NO_ENCONTRADO));
+
+        modeloEntity.setNombre(modeloRequestDto.getNombre());
+        modeloEntity.setMarcaEntity(marcaEntity);
+        modeloEntity.setDescripcion(modeloRequestDto.getDescripcion());
+        modeloEntity.setAnioLanzamiento(modeloRequestDto.getAnioLanzamiento());
+        modeloEntity.setVersion(modeloRequestDto.getVersion());
+        modeloEntity.setCapacidadPasajeros(modeloRequestDto.getCapacidadPasajeros());
+
+        return modeloMapper.toDTO(modeloRepository.save(modeloEntity));
+    }
+
+    @Override
+    public ModeloResponseDto findById(Long id) {
+        ModeloEntity entity = modeloRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format(ExceptionMessages.MODELO_NO_ENCONTRADO, id)));
+
+        ModeloResponseDto dto = modeloMapper.toDTO(entity);
+
+        return dto;
+    }
+
+    @Override
+    public Void delete(Long id) {
+        modeloRepository.deleteById(id);
+        return null;
     }
 }

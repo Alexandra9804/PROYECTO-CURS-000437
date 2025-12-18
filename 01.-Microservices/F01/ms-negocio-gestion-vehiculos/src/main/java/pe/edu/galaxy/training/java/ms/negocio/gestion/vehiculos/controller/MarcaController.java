@@ -89,7 +89,7 @@ public class MarcaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MarcaResponseDto> updateCargo(
+    public ResponseEntity<MarcaResponseDto> updateMarca(
             @PathVariable Long id,
             @RequestBody MarcaRequestDto marcaRequestDto) {
         return ResponseEntity.ok(marcaService.update(id, marcaRequestDto));
