@@ -1,10 +1,16 @@
 package pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.services.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.constant.ExceptionMessages;
+import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.ModeloResponseDto;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.VehiculoRequestDto;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.VehiculoResponseDto;
+import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.entity.MarcaEntity;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.entity.ModeloEntity;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.entity.VehiculoEntity;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.exceptions.ResourceNotFoundException;
@@ -48,6 +54,31 @@ public class VehiculoServiceImpl implements VehiculoService {
 
     }
 
+    @Override
+    public VehiculoResponseDto update(Long idVehiculo, VehiculoRequestDto vehiculoRequestDto) {
+        VehiculoEntity vehiculoEntity = vehiculoRepository.findById(idVehiculo)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format(ExceptionMessages.VEHICULO_NO_ENCONTRADO, idVehiculo)));
+
+        ModeloEntity modeloEntity = modeloRepository.findById(vehiculoRequestDto.getIdModelo())
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionMessages.MODELO_NO_ENCONTRADO));
+
+
+        vehiculoEntity.setPlaca(vehiculoRequestDto.getPlaca());
+        vehiculoEntity.setModeloEntity(modeloEntity);
+        vehiculoEntity.setAnio(vehiculoRequestDto.getAnio());
+        vehiculoEntity.setColor(vehiculoRequestDto.getColor());
+        vehiculoEntity.setKilometraje(vehiculoRequestDto.getKilometraje());
+        vehiculoEntity.setVin(vehiculoRequestDto.getVin());
+        vehiculoEntity.setPlaca(vehiculoRequestDto.getPlaca());
+        vehiculoEntity.setTipoCombustible(vehiculoRequestDto.getTipoCombustible());
+        vehiculoEntity.setTransmision(vehiculoRequestDto.getTransmision());
+        vehiculoEntity.setEstadoVehiculo(vehiculoRequestDto.getEstadoVehiculo());
+        vehiculoEntity.setPrecio(vehiculoRequestDto.getPrecio());
+
+        return vehiculoMapper.toDTO(vehiculoRepository.save(vehiculoEntity));
+    }
+
     @Transactional(readOnly = true)
     @Override
     public List<VehiculoResponseDto> findAll() {
@@ -55,9 +86,9 @@ public class VehiculoServiceImpl implements VehiculoService {
                 .map(entity -> {
                     VehiculoResponseDto dto = vehiculoMapper.toDTO(entity);
 
-                    tarifaVehiculoRepository
+                    /*tarifaVehiculoRepository
                             .findFirstByVehiculo_IdVehiculoAndFechaFinIsNullAndEstado(entity.getIdVehiculo(), "1")
-                            .ifPresent(tarifa -> dto.setTarifaActual(tarifa.getMonto()));
+                            .ifPresent(tarifa -> dto.setTarifaActual(tarifa.getMonto()));*/
 
                     return dto;
                 })
@@ -73,12 +104,26 @@ public class VehiculoServiceImpl implements VehiculoService {
                         String.format(ExceptionMessages.VEHICULO_NO_ENCONTRADO, id)));
 
         VehiculoResponseDto dto = vehiculoMapper.toDTO(entity);
-
+/*
         tarifaVehiculoRepository
                 .findFirstByVehiculo_IdVehiculoAndFechaFinIsNullAndEstado(entity.getIdVehiculo(), "1")
-                .ifPresent(tarifa -> dto.setTarifaActual(tarifa.getMonto()));
+                .ifPresent(tarifa -> dto.setTarifaActual(tarifa.getMonto()));*/
 
         return dto;
+    }
+
+    @Override
+    public Page<VehiculoResponseDto> listarVehiculos(String vin, Long idMarca, Long idModelo, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("idVehiculo").ascending());
+
+        return vehiculoRepository.buscarVehiculos(vin, idMarca, idModelo, pageable)
+                .map(vehiculoMapper::toDTO);
+    }
+
+    @Override
+    public Void delete(Long id) {
+        vehiculoRepository.deleteById(id);
+        return null;
     }
 
 }

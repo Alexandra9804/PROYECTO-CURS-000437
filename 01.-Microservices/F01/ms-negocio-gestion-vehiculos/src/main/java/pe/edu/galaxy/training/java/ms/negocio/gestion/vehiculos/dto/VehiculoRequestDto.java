@@ -9,6 +9,8 @@ import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.enums.EstadoVehi
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.enums.TipoCombustible;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.enums.TipoTransmision;
 
+import java.math.BigDecimal;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -38,6 +40,9 @@ public class VehiculoRequestDto {
 
     @Schema(description = "Estado actual del vehículo", example = "DISPONIBLE")
     private EstadoVehiculo estadoVehiculo;
+
+    @Schema(description = "Precio del vehículo", example = "50000")
+    private BigDecimal precio;
 
     @Schema(description = "Identificador del modelo asociado", example = "3")
     private Long idModelo;

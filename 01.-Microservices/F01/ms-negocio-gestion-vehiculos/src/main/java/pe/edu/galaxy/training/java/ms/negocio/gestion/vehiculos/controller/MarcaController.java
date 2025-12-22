@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.advice.SuccessMessage;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.MarcaRequestDto;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.MarcaResponseDto;
+import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.ModeloComboResponseDto;
+import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.ModeloResponseDto;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.services.MarcaService;
 
 import java.util.List;
@@ -121,8 +123,22 @@ public class MarcaController {
         return ResponseEntity.ok(resultado);
     }
 
+    @Operation(
+            summary = "Listar modelos por marca",
+            description = "Obtiene el listado de modelos asociados a una marca específica"
+    )
+    @GetMapping("/{idMarca}/modelos")
+    public ResponseEntity<List<ModeloComboResponseDto>> listarModelosPorMarca(
+            @PathVariable Long idMarca
+    ) {
+        return ResponseEntity.ok(
+                marcaService.listModelsByIdMarca(idMarca)
+        );
+    }
+
     private static class SuccessMarcaResponse extends SuccessMessage<MarcaResponseDto> {}
     private static class SuccessListMarcaResponse extends SuccessMessage<List<MarcaResponseDto>> {}
     private static class SuccessPageMarcaResponse extends SuccessMessage<Page<MarcaResponseDto>> {}
+    private static class SuccessModeloComboResponse extends SuccessMessage<ModeloComboResponseDto> {}
 
 }

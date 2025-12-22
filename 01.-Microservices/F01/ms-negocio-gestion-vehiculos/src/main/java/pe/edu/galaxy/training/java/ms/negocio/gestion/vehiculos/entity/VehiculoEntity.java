@@ -8,6 +8,7 @@ import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.enums.EstadoVehi
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.enums.TipoCombustible;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.enums.TipoTransmision;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @NoArgsConstructor
@@ -25,7 +26,7 @@ public class VehiculoEntity extends BaseEntity {
     @Column(name = "id_vehiculo", nullable = false, updatable = false)
     private Long idVehiculo;
 
-    @Column(name = "placa", nullable = false, unique = true, length = 6)
+    @Column(name = "placa", nullable = false, length = 6)
     private String placa;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -56,6 +57,10 @@ public class VehiculoEntity extends BaseEntity {
     @Column(name = "estado_vehiculo", nullable = false, length = 20)
     private EstadoVehiculo estadoVehiculo;
 
+    @Column(name = "precio", nullable = false)
+    private BigDecimal precio;
+
+    /*
     @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
-    private List<TarifaVehiculoEntity> tarifas;
+    private List<TarifaVehiculoEntity> tarifas;*/
 }

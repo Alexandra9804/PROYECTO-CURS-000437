@@ -17,6 +17,8 @@ import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.repository.Marca
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.repository.ModeloRepository;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.services.ModeloService;
 
+import java.util.List;
+
 @Service
 public class ModeloServiceImpl implements ModeloService {
 
@@ -82,4 +84,5 @@ public class ModeloServiceImpl implements ModeloService {
         modeloRepository.deleteById(id);
         return null;
     }
+
 }

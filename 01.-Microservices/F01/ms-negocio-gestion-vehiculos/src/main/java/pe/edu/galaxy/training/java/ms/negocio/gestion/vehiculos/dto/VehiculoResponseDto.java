@@ -56,6 +56,9 @@ public class VehiculoResponseDto {
     @Schema(description = "Nombre de la marca del vehículo", example = "Toyota")
     private String marcaNombre;
 
-    @Schema(description = "Tarifa diaria vigente del vehículo", example = "250.00")
-    private BigDecimal tarifaActual;
+   /*@Schema(description = "Tarifa diaria vigente del vehículo", example = "250.00")
+    private BigDecimal tarifaActual;*/
+
+    @Schema(description = "Precio del vehículo", example = "50000")
+    private BigDecimal precio;
 }

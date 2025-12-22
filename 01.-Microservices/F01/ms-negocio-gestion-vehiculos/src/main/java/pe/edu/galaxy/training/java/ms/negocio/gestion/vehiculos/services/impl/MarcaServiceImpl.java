@@ -6,15 +6,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.constant.ExceptionMessages;
-import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.MarcaRequestDto;
-import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.MarcaResponseDto;
-import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.VehiculoResponseDto;
+import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.*;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.entity.MarcaEntity;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.entity.ModeloEntity;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.entity.VehiculoEntity;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.exceptions.ResourceNotFoundException;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.mapper.MarcaMapper;
+import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.mapper.ModeloMapper;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.repository.MarcaRepository;
+import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.repository.ModeloRepository;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.services.MarcaService;
 
 import java.util.List;
@@ -23,11 +23,17 @@ import java.util.List;
 public class MarcaServiceImpl implements MarcaService {
 
     private final MarcaRepository marcaRepository;
-    private final MarcaMapper marcaMapper;
+    private final ModeloRepository modeloRepository;
 
-    public MarcaServiceImpl(MarcaRepository marcaRepository, MarcaMapper marcaMapper) {
+    private final MarcaMapper marcaMapper;
+    private final ModeloMapper modeloMapper;
+
+
+    public MarcaServiceImpl(MarcaRepository marcaRepository, ModeloRepository modeloRepository, MarcaMapper marcaMapper, ModeloMapper modeloMapper) {
         this.marcaRepository = marcaRepository;
+        this.modeloRepository = modeloRepository;
         this.marcaMapper = marcaMapper;
+        this.modeloMapper = modeloMapper;
     }
 
     @Override
@@ -83,5 +89,18 @@ public class MarcaServiceImpl implements MarcaService {
         return marcaRepository
                 .findByNombreContainingIgnoreCase(nombre, pageable)
                 .map(marcaMapper::toDTO);
+    }
+
+
+    @Override
+    public List<ModeloComboResponseDto> listModelsByIdMarca(Long idMarca) {
+        MarcaEntity marcaEntity = marcaRepository.findById(idMarca)
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionMessages.MARCA_NO_ENCONTRADO));
+
+        List<ModeloEntity> modelos = modeloRepository.findByMarcaEntity_IdMarca(idMarca);
+
+        return modelos.stream()
+                .map(modeloMapper::toComboDTO)
+                .toList();
     }
 }

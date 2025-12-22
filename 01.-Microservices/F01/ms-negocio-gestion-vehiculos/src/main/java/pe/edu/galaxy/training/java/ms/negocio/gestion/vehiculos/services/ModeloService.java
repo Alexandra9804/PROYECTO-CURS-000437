@@ -6,6 +6,8 @@ import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.MarcaRespons
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.ModeloRequestDto;
 import pe.edu.galaxy.training.java.ms.negocio.gestion.vehiculos.dto.ModeloResponseDto;
 
+import java.util.List;
+
 public interface ModeloService {
     Page<ModeloResponseDto> listarModelos(String nombre, Long idMarca, int page, int size);
     ModeloResponseDto save(ModeloRequestDto modeloRequestDto);
