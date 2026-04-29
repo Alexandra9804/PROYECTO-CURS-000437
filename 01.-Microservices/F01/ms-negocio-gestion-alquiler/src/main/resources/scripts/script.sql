@@ -9,36 +9,30 @@ aud_actualizacion_id_usuario BIGINT,
 estado CHAR(1) DEFAULT '1'
 );
 
-INSERT INTO alquiler_estado (descripcion) VALUES ('Pendiente de pago'), ('Pagado'), ('En proceso'), ('Anulado');
+INSERT INTO alquiler_estado (descripcion)
+VALUES
+    ('PENDIENTE_VALIDACION'),
+    ('CONFIRMADO'),
+    ('RECHAZADO'),
+    ('EN_CURSO'),
+    ('FINALIZADO'),
+    ('ANULADO');
 
-CREATE TABLE alquiler_cabecera (
+CREATE TABLE alquiler (
 id_alquiler SERIAL PRIMARY KEY,
 id_cliente BIGINT NOT NULL,
 fecha_inicio DATE NOT NULL,
 fecha_fin DATE NOT NULL,
-sub_total NUMERIC(12,2),
-igv NUMERIC(12,2),
-total NUMERIC(12,2),
-id_alquiler_estado INT NOT NULL REFERENCES alquiler_estado(id_alquiler_estado),
+sub_total DOUBLE PRECISION,
+igv DOUBLE PRECISION,
+total DOUBLE PRECISION,
+id_alquiler_estado BIGINT NOT NULL REFERENCES alquiler_estado(id_alquiler_estado),
 aud_registro_fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 aud_registro_id_usuario BIGINT,
 aud_actualizacion_fecha TIMESTAMP,
 aud_actualizacion_id_usuario BIGINT,
-estado CHAR(1) DEFAULT '1'
+estado VARCHAR(1) DEFAULT '1',
+fecha_registro DATE,
+id_vehiculo BIGINT
 );
 
-CREATE TABLE alquiler_detalle (
-id_alquiler_detalle SERIAL PRIMARY KEY,
-id_alquiler BIGINT NOT NULL REFERENCES alquiler_cabecera(id_alquiler),
-id_vehiculo BIGINT NOT NULL,
-precio_unitario NUMERIC(12,2) NOT NULL,
-cantidad INT NOT NULL,
-sub_total NUMERIC(12,2),
-igv NUMERIC(12,2),
-total NUMERIC(12,2),
-aud_registro_fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-aud_registro_id_usuario BIGINT,
-aud_actualizacion_fecha TIMESTAMP,
-aud_actualizacion_id_usuario BIGINT,
-estado CHAR(1) DEFAULT '1'
-);

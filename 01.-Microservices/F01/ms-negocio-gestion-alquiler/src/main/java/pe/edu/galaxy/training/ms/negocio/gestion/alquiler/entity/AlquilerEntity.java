@@ -3,21 +3,19 @@ package pe.edu.galaxy.training.ms.negocio.gestion.alquiler.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.SQLRestriction;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.entity.base.BaseEntity;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity(name = "AlquilerCabeceraEntity")
-@Table(name = "alquiler_cabecera")
-@Comment("Tabla que almacena los datos de la cabecera para alquilar")
+@Entity(name = "AlquilerEntity")
+@Table(name = "alquiler")
+@Comment("Tabla que almacena los datos del alquiler")
 @EqualsAndHashCode(callSuper = true)
-public class AlquilerCabeceraEntity extends BaseEntity {
+public class AlquilerEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_alquiler")
@@ -26,6 +24,10 @@ public class AlquilerCabeceraEntity extends BaseEntity {
     // Referencia al cliente (desde ms-clientes)
     @Column(name = "id_cliente", nullable = false)
     private Long idCliente;
+
+    // Referencia al vehiculo (desde ms-vehiculos)
+    @Column(name = "id_vehiculo", nullable = false)
+    private Long idVehiculo;
 
     @Column(name = "fecha_inicio", nullable = false)
     private LocalDate fechaInicio;
@@ -45,13 +47,12 @@ public class AlquilerCabeceraEntity extends BaseEntity {
     @Column(name = "fecha_registro")
     private LocalDate fechaRegistro;
 
+    @Column(name = "id_alquiler_estado", nullable = false)
+    private Long idAlquilerEstado;
+
     // Relación con la tabla maestra de estado
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_alquiler_estado", nullable = false)
+    @JoinColumn(name = "id_alquiler_estado", insertable = false, updatable = false)
     private AlquilerEstadoEntity estadoAlquiler;
 
-    // Relación uno a muchos con detalle
-    @OneToMany(mappedBy = "alquilerCabecera", cascade = CascadeType.ALL)
-    @SQLRestriction("estado = '1'")
-    private List<AlquilerDetalleEntity> listAlquilerDetalle;
 }

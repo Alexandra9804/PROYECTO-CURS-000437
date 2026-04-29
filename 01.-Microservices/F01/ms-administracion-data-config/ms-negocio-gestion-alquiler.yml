@@ -25,6 +25,8 @@ spring:
         url: http://localhost:8890
         instance:
           management-base-url: http://localhost:${server.port:8083}
+  kafka:
+    bootstrap-servers: localhost:9092
 
 eureka:
   instance:
@@ -51,3 +53,11 @@ management:
     health:
       probes:
         enabled: true
+
+custom:
+  topic:
+    alquiler:
+      registro: topic-alquiler-registro
+      validacion: topic-vehiculo-alquiler-validacion
+  group:
+    alquiler-validacion: group-alquiler-validacion

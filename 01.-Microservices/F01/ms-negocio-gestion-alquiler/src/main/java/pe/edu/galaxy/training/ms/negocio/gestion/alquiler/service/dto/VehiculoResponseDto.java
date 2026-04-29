@@ -31,5 +31,5 @@ public class VehiculoResponseDto {
     private String vin;
 
     @Schema(description = "Tarifa diaria vigente del vehículo", example = "250.00")
-    private Integer tarifaActual;
+    private Integer precio;
 }

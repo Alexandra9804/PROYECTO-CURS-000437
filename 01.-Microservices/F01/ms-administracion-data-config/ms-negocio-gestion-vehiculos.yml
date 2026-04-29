@@ -12,7 +12,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
   boot:
     admin:
@@ -20,6 +20,9 @@ spring:
         url: http://localhost:8890
         instance:
           management-base-url: http://localhost:${server.port}
+  kafka:
+    bootstrap-servers: localhost:9092
+
 eureka:
   instance:
       hostname: localhost
@@ -44,3 +47,11 @@ management:
         health:
             probes:
                 enabled: true
+
+custom:
+  topic:
+    alquiler:
+      registro: topic-alquiler-registro
+      validacion: topic-vehiculo-alquiler-validacion
+  group:
+    alquiler: group-alquiler-vehiculos

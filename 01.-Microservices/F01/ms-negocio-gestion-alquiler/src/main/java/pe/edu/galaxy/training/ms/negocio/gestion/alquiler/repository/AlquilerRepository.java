@@ -2,8 +2,8 @@ package pe.edu.galaxy.training.ms.negocio.gestion.alquiler.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.entity.AlquilerDetalleEntity;
+import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.entity.AlquilerEntity;
 
 @Repository
-public interface AlquilerDetalleRepository extends JpaRepository<AlquilerDetalleEntity, Long> {
+public interface AlquilerRepository extends JpaRepository<AlquilerEntity, Long> {
 }
