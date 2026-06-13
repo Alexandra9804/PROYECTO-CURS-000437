@@ -6,9 +6,11 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.dto.AlquilerRegistroDto;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.dto.AlquilerRegistroRequestDto;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.dto.AlquilerRegistroResponseDto;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.dto.AlquilerResponseDto;
+import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.mapper.AlquilerRegistroMapper;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.service.AlquilerService;
 
 import java.util.List;
@@ -17,9 +19,12 @@ import java.util.List;
 @RequestMapping("/api/v1/alquileres")
 @Tag(name = "Gestión de Alquiler", description = "Operaciones sobre los alquileres")
 public class AlquilerController {
+
+    private final AlquilerRegistroMapper alquilerRegistroMapper;
     private final AlquilerService alquilerService;
 
-    public AlquilerController(AlquilerService alquilerService){
+    public AlquilerController(AlquilerRegistroMapper alquilerRegistroMapper, AlquilerService alquilerService){
+        this.alquilerRegistroMapper = alquilerRegistroMapper;
         this.alquilerService = alquilerService;
     }
 
@@ -37,7 +42,9 @@ public class AlquilerController {
     @Operation(summary = "Registrar un nuevo alquiler")
     public ResponseEntity<AlquilerRegistroResponseDto> save(
             @Valid @RequestBody AlquilerRegistroRequestDto requestDto) {
+        AlquilerRegistroDto dto = alquilerRegistroMapper.toDto(requestDto);
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(alquilerService.save(requestDto));
+                .body(alquilerService.save(dto));
     }
 }

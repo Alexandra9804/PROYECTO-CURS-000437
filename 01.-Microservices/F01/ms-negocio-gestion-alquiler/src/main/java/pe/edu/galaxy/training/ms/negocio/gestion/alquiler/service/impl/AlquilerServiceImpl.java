@@ -1,18 +1,24 @@
 package pe.edu.galaxy.training.ms.negocio.gestion.alquiler.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.dto.AlquilerRegistroDto;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.dto.AlquilerRegistroRequestDto;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.dto.AlquilerRegistroResponseDto;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.dto.AlquilerResponseDto;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.entity.AlquilerEntity;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.entity.AlquilerEstadoEntity;
+import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.entity.OutboxEventEntity;
+import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.enums.OutboxStatus;
+import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.events.AlquilerEvent;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.mapper.AlquilerMapper;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.mapper.AlquilerRegistroMapper;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.producer.AlquilerMessage;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.repository.AlquilerEstadoRepository;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.repository.AlquilerRepository;
+import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.repository.OutboxEventRepository;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.service.AlquilerService;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.service.client.restclient.ClienteService;
 import pe.edu.galaxy.training.ms.negocio.gestion.alquiler.service.client.restclient.VehiculoService;
@@ -41,6 +47,9 @@ public class AlquilerServiceImpl implements AlquilerService {
     private final AlquilerRegistroMapper alquilerregistroMapper;
     private final AlquilerMapper alquilerMapper;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final OutboxEventRepository outboxEventRepository;
+    private final ObjectMapper objectMapper;
+
 
     public AlquilerServiceImpl(AlquilerRepository cabeceraRepository,
                                AlquilerEstadoRepository alquilerEstadoRepository,
@@ -48,7 +57,7 @@ public class AlquilerServiceImpl implements AlquilerService {
                                VehiculoService vehiculoRestClient,
                                AlquilerRegistroMapper alquilerRegistroMapper,
                                AlquilerMapper alquilerMapper,
-                               ApplicationEventPublisher applicationEventPublisher) {
+                               ApplicationEventPublisher applicationEventPublisher, OutboxEventRepository outboxEventRepository, ObjectMapper objectMapper) {
         this.cabeceraRepository = cabeceraRepository;
         this.alquilerEstadoRepository = alquilerEstadoRepository;
         this.clienteRestClient = clienteRestClient;
@@ -56,6 +65,8 @@ public class AlquilerServiceImpl implements AlquilerService {
         this.alquilerregistroMapper = alquilerRegistroMapper;
         this.alquilerMapper = alquilerMapper;
         this.applicationEventPublisher = applicationEventPublisher;
+        this.outboxEventRepository = outboxEventRepository;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -74,28 +85,28 @@ public class AlquilerServiceImpl implements AlquilerService {
 
     @Override
     @Transactional
-    public AlquilerRegistroResponseDto save(AlquilerRegistroRequestDto requestDto) {
+    public AlquilerRegistroResponseDto save(AlquilerRegistroDto alquilerRegistroDto) {
 
-        if (requestDto.getFechaFin().isBefore(requestDto.getFechaInicio())) {
+        if (alquilerRegistroDto.getFechaFin().isBefore(alquilerRegistroDto.getFechaInicio())) {
             throw new RuntimeException("La fechaFin no puede ser menor que la fechaInicio");
         }
 
-        ClienteResponseDto cliente = clienteRestClient.findById(requestDto.getIdCliente());
+        ClienteResponseDto cliente = clienteRestClient.findById(alquilerRegistroDto.getIdCliente());
         if (cliente == null) {
-            throw new RuntimeException("No se encontró el cliente con ID " + requestDto.getIdCliente());
+            throw new RuntimeException("No se encontró el cliente con ID " + alquilerRegistroDto.getIdCliente());
         }
 
-        VehiculoResponseDto vehiculo = vehiculoRestClient.findById(requestDto.getIdVehiculo());
+        VehiculoResponseDto vehiculo = vehiculoRestClient.findById(alquilerRegistroDto.getIdVehiculo());
         if (vehiculo == null) {
-            throw new RuntimeException("No se encontró el vehículo con ID " + requestDto.getIdVehiculo());
+            throw new RuntimeException("No se encontró el vehículo con ID " + alquilerRegistroDto.getIdVehiculo());
         }
 
         AlquilerEstadoEntity estadoInicial = alquilerEstadoRepository.findById(ESTADO_PENDIENTE_VALIDACION)
                 .orElseThrow(() -> new RuntimeException("No se encontró el estado inicial del alquiler"));
 
-        AlquilerEntity alquilerEntity = alquilerregistroMapper.toEntity(requestDto);
+        AlquilerEntity alquilerEntity = alquilerregistroMapper.toEntity(alquilerRegistroDto);
 
-        long diasAlquiler = calcularDias(requestDto.getFechaInicio(), requestDto.getFechaFin());
+        long diasAlquiler = calcularDias(alquilerRegistroDto.getFechaInicio(), alquilerRegistroDto.getFechaFin());
 
         double precio = vehiculo.getPrecio();
         double subTotal = redondear(diasAlquiler * precio);
@@ -114,24 +125,31 @@ public class AlquilerServiceImpl implements AlquilerService {
         AlquilerEntity entityPersisted = cabeceraRepository.findById(saved.getIdAlquiler())
                 .orElseThrow(() -> new RuntimeException("No se pudo recuperar el alquiler recién registrado"));
 
-        AlquilerMessage alquilerMessage = AlquilerMessage.builder()
-                .idAlquiler(entityPersisted.getIdAlquiler())
-                .idCliente(entityPersisted.getIdCliente())
-                .idVehiculo(entityPersisted.getIdVehiculo())
-                .fechaInicio(entityPersisted.getFechaInicio().toString())
-                .fechaFin(entityPersisted.getFechaFin().toString())
-                .estadoAlquiler(
-                        entityPersisted.getEstadoAlquiler() != null
-                                ? entityPersisted.getEstadoAlquiler().getDescripcion()
-                                : estadoInicial.getDescripcion()
-                )
-                .total(entityPersisted.getTotal())
-                .fecha(LocalDateTime.now().format(DATE_TIME_FORMATTER))
-                .build();
+        AlquilerEvent alquilerEvent = alquilerregistroMapper.toEvent(entityPersisted);
 
-        applicationEventPublisher.publishEvent(alquilerMessage);
+        try {
+            String payload = objectMapper.writeValueAsString(alquilerEvent);
 
-        return alquilerregistroMapper.toDto(entityPersisted);
+            OutboxEventEntity outboxEvent = OutboxEventEntity.builder()
+                    .aggregateId(entityPersisted.getIdAlquiler())
+                    .eventType("ALQUILER_REGISTRADO")
+                    .topic("topic-alquiler-registro")
+                    .messageKey(String.valueOf(entityPersisted.getIdAlquiler()))
+                    .payload(payload)
+                    .status(OutboxStatus.PENDIENTE)
+                    .failedAttemptCount(0)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+
+            outboxEventRepository.save(outboxEvent);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error creando evento outbox para alquiler", e);
+        }
+
+        applicationEventPublisher.publishEvent(alquilerEvent);
+
+        return alquilerregistroMapper.toResponseDto(entityPersisted);
     }
 
     private AlquilerResponseDto mapToResponse(AlquilerEntity alquilerEntity) {

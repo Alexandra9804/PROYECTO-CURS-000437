@@ -11,6 +11,16 @@ spring:
     username: db_ms_alquiler
     password: 123456
 
+  data:
+    mongodb:
+      database: kafka_messages
+      username: root
+      password: example
+      host: localhost
+      port: 27017
+      authentication-database: admin
+      auto-index-creation: true
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -27,6 +37,21 @@ spring:
           management-base-url: http://localhost:${server.port:8083}
   kafka:
     bootstrap-servers: localhost:9092
+  
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: achavezgal@gmail.com
+    password: olua uwks mgnz gntp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  notification:
+    username: achavezga@gmail.com
 
 eureka:
   instance:
@@ -61,3 +86,7 @@ custom:
       validacion: topic-vehiculo-alquiler-validacion
   group:
     alquiler-validacion: group-alquiler-validacion
+    
+  kafka:
+    consumer:
+      alquiler-validacion-enabled: true
